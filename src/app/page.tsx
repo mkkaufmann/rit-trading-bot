@@ -1,95 +1,72 @@
+'use client'
 import Image from "next/image";
 import styles from "./page.module.css";
+import Graph from "@/components/Graph";
+import OrderBookChart from "@/components/OrderBookChart";
+import React from "react";
+
+const generateRandomOrders = (n: number, price: number): OrderBook => {
+  const fakeBidOrders: Order[] = [];
+  const fakeAskOrders: Order[] = [];
+
+  for (let i = 0; i < n; i++) {
+    const bidPrice = price - Math.random() * 0.1; // Generate bid prices slightly below the given price
+    const askPrice = price + Math.random() * 0.1; // Generate ask prices slightly above the given price
+
+    const bidQuantity = Math.floor(Math.random() * 5000) + 500; // Generate bid quantities between 50 and 150
+    const askQuantity = Math.floor(Math.random() * 5000) + 500; // Generate ask quantities between 50 and 150
+
+    const bidOrder: Order = {
+      order_id: i + 1, // Unique order ID
+      period: 1,
+      tick: i + 1,
+      trader_id: `trader${i + 1}`,
+      ticker: 'CRZY',
+      type: 'LIMIT',
+      quantity: bidQuantity,
+      action: 'BUY',
+      price: bidPrice,
+      quantity_filled: 0,
+      vwap: 0,
+      status: 'OPEN',
+    };
+
+    const askOrder: Order = {
+      order_id: i + 1 + n, // Unique order ID
+      period: 1,
+      tick: i + 1 + n,
+      trader_id: `trader${i + 1 + n}`,
+      ticker: 'CRZY',
+      type: 'LIMIT',
+      quantity: askQuantity,
+      action: 'SELL',
+      price: askPrice,
+      quantity_filled: 0,
+      vwap: 0,
+      status: 'OPEN',
+    };
+
+    fakeBidOrders.push(bidOrder);
+    fakeAskOrders.push(askOrder);
+  }
+
+  const fakeOrderBook: OrderBook = {
+    bid: fakeBidOrders,
+    ask: fakeAskOrders,
+  };
+
+  return fakeOrderBook;
+};
+
 
 export default function Home() {
+  const [fakeOrderBook,setFakeOrderBook] = React.useState(generateRandomOrders(10, 14.21));
+  setInterval(()=>{setFakeOrderBook(generateRandomOrders(10,14.21))},5000);
+  React.useEffect(()=>{
+  },[fakeOrderBook]);
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+        <OrderBookChart {...fakeOrderBook}/>
     </main>
   );
 }
