@@ -25,4 +25,16 @@ from rit_api import *
 #   Send and cancel orders
 #       
 
+if len(sys.argv) < 3:
+    print("Please provide the HOST and API_KEY as command-line arguments.")
+    sys.exit(1)
+
+HOST = sys.argv[1]
+API_KEY = sys.argv[2]
+
+init(HOST,API_KEY)
+
+get_case()
+get_trader()
+get_limits()
 

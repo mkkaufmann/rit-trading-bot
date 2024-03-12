@@ -13,10 +13,15 @@ headers = {
     "X-API-Key": API_KEY
 }
 
-DEBUG = False
+DEBUG = True
 def debug_print(*args, **kwargs):
     if DEBUG:
         print(*args, **kwargs)
+
+def init(host,api_key):
+    global HOST, API_KEY
+    HOST = host
+    API_KEY = api_key
 
 debug_print(f"HOST: {HOST}")
 debug_print(f"API_KEY: {API_KEY}")
