@@ -1,9 +1,13 @@
 import sys
 import requests
 
+HOST = ""
+API_KEY = ""
+
 headers = {
     "X-API-Key": API_KEY
 }
+
 
 DEBUG = True
 def debug_print(*args, **kwargs):
@@ -11,9 +15,12 @@ def debug_print(*args, **kwargs):
         print(*args, **kwargs)
 
 def init(host,api_key):
-    global HOST, API_KEY
+    global HOST, API_KEY,headers
     HOST = host
     API_KEY = api_key
+    headers = {
+        "X-API-Key": API_KEY
+    }
 
 debug_print(f"HOST: {HOST}")
 debug_print(f"API_KEY: {API_KEY}")
