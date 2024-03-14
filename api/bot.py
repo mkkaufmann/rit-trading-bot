@@ -53,8 +53,11 @@ trader = get_trader()
 #         return {"bids":[],"asks":[]}
 #     return {"bids":[order for order in book["bids"]], "asks":[order for order in book["asks"]]]}
 
+counter = 0
 while True:
+    print(counter)
     post_order("HAR","MARKET",1,"BUY")
+    counter = counter + 1
     # case = get_case()
     # if case is None:
     #     time.sleep(0.5)
