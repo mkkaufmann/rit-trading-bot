@@ -48,38 +48,39 @@ other_orders = {"bids":[], "asks":[]}
 
 trader = get_trader()
 
-# def get_my_orders(book):
-#     if book is None:
-#         return {"bids":[],"asks":[]}
-#     return {"bids":[order for order in book["bids"]], "asks":[order for order in book["asks"]]]}
+def get_my_orders(book):
+    if book is None or trader is None:
+        return {"bids":[],"asks":[]}
+    return {"bids":[order for order in book["bids"] if trader["trader_id"] == order["trader_id"]], "asks":[order for order in book["asks"] if trader["trader_id"] == order["trader_id"]]}
 
 counter = 0
 while True:
-    print(counter)
-    post_order("HAR","MARKET",1,"BUY")
-    counter = counter + 1
-    # case = get_case()
-    # if case is None:
-    #     time.sleep(0.5)
-    #     continue
-    # if prev_case is not None and prev_case["period"] == case["period"] and prev_case["tick"] == case["tick"]:
-    #     time.sleep(0.5)
-    #     continue
+    if trader is None:
+        trader = get_trader()
+    case = get_case()
+    if case is None:
+        time.sleep(0.5)
+        continue
+    if prev_case is not None and prev_case["period"] == case["period"] and prev_case["tick"] == case["tick"]:
+        time.sleep(0.5)
+        continue
 
-    # # We have a case and a new tick
-    # print(case)
+    # We have a case and a new tick
+    print(case)
 
-    # # Only print limits when they change
-    # limits = get_limits()
-    # if limits != prev_limits:
-    #     print(limits)
+    # Only print limits when they change
+    limits = get_limits()
+    if limits != prev_limits:
+        print(limits)
 
-    # # Taking shortcut for this case
-    # ticker = "HAR"
-    # book = get_security_book(ticker)
-    # print(book)
+    # Taking shortcut for this case
+    ticker = "HAR"
+    book = get_security_book(ticker)
+    #print(book)
+    my_orders = get_my_orders(book)
+    print(my_orders)
 
-    # prev_case = case
+    prev_case = case
 
 
 
