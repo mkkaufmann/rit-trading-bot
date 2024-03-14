@@ -50,8 +50,10 @@ trader = get_trader()
 while True:
     case = get_case()
     if case is None:
+        print("no case")
         continue
     if prev_case is None or (prev_case["period"] == case["period"] and prev_case["tick"] == case["tick"]):
+        print("case same as previous")
         continue
 
     # We have a case and a new tick
