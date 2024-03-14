@@ -40,8 +40,12 @@ init(HOST,API_KEY)
 API_ORDERS_PER_TICK = 100
 API_ORDERS_PER_SECOND = 10
 
+EDGE = 0.05
+
 prev_case = None
 prev_limits = None
+prev_my_orders = None
+#prev_other_orders = None
 
 my_orders = {"bids":[], "asks":[]}
 other_orders = {"bids":[], "asks":[]}
@@ -52,6 +56,18 @@ def get_my_orders(book):
     if book is None or trader is None:
         return {"bids":[],"asks":[]}
     return {"bids":[order for order in book["bids"] if trader["trader_id"] == order["trader_id"]], "asks":[order for order in book["asks"] if trader["trader_id"] == order["trader_id"]]}
+
+def get_other_orders(book):
+    if book is None or trader is None:
+        return {"bids":[],"asks":[]}
+    return {"bids":[order for order in book["bids"] if trader["trader_id"] != order["trader_id"]], "asks":[order for order in book["asks"] if trader["trader_id"] != order["trader_id"]]}
+
+def get_fair_price(book):
+    if book is None:
+        return None
+    #simple halfway between current spread
+    #quite naive
+    return (max([bid["price"] for bid in book["bids"]])+min(ask["price"] for ask in book["asks"]))/2
 
 counter = 0
 while True:
@@ -66,7 +82,7 @@ while True:
         continue
 
     # We have a case and a new tick
-    print(case)
+    print(f"Period: {case['period']}, Tick: {case['ticker']}")
 
     # Only print limits when they change
     limits = get_limits()
@@ -78,9 +94,17 @@ while True:
     book = get_security_book(ticker)
     #print(book)
     my_orders = get_my_orders(book)
-    print(my_orders)
-
+    #print(my_orders)
+    #cancel all old orders
+    post_cancel_orders(ids=[order["order_id"] for order in my_orders["bids"]])
+    post_cancel_orders(ids=[order["order_id"] for order in my_orders["asks"]])
+    fair_price = get_fair_price(book)
+    if fair_price is None:
+        continue
+    post_order("HAR","LIMIT",200,"BUY",price=fair_price-EDGE)
+    post_order("HAR","LIMIT",200,"SELL",price=fair_price+EDGE)
     prev_case = case
+    prev_my_orders = my_orders
 
 
 
