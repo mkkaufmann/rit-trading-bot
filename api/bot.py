@@ -82,7 +82,7 @@ while True:
         continue
 
     # We have a case and a new tick
-    print(f"Period: {case['period']}, Tick: {case['ticker']}")
+    print(f"Period: {case['period']}, Tick: {case['tick']}")
 
     # Only print limits when they change
     limits = get_limits()
