@@ -271,10 +271,10 @@ def get_security_book(ticker, limit=20):
        book_data = response.json()
        debug_print(f"Order Book for {ticker}:")
        debug_print("Bids:")
-       for bid in book_data.get("bid", []):
+       for bid in book_data.get("bids", []):
            debug_print(f"  Order ID: {bid['order_id']}, Period: {bid['period']}, Tick: {bid['tick']}, Trader ID: {bid['trader_id']}, Type: {bid['type']}, Quantity: {bid['quantity']}, Action: {bid['action']}, Price: {bid['price']}, Quantity Filled: {bid['quantity_filled']}, VWAP: {bid['vwap']}, Status: {bid['status']}")
        debug_print("Asks:")
-       for ask in book_data.get("ask", []):
+       for ask in book_data.get("asks", []):
            debug_print(f"  Order ID: {ask['order_id']}, Period: {ask['period']}, Tick: {ask['tick']}, Trader ID: {ask['trader_id']}, Type: {ask['type']}, Quantity: {ask['quantity']}, Action: {ask['action']}, Price: {ask['price']}, Quantity Filled: {ask['quantity_filled']}, VWAP: {ask['vwap']}, Status: {ask['status']}")
        return book_data
    except requests.exceptions.RequestException as e:
