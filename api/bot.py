@@ -39,7 +39,7 @@ init(HOST,API_KEY)
 API_ORDERS_PER_TICK = 100
 API_ORDERS_PER_SECOND = 10
 
-prev_case = {"tick":-1}
+prev_case = None
 prev_limits = None
 
 my_orders = []
