@@ -1,4 +1,5 @@
 from rit_api import *
+import time
 
 # TODO:
 # Determine when to start program, or how to wait until game starts/repeat for multiple rounds
@@ -50,8 +51,10 @@ trader = get_trader()
 while True:
     case = get_case()
     if case is None:
+        time.sleep(0.5)
         continue
     if prev_case is not None and prev_case["period"] == case["period"] and prev_case["tick"] == case["tick"]:
+        time.sleep(0.5)
         continue
 
     # We have a case and a new tick
