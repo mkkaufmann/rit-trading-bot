@@ -24,17 +24,44 @@ from rit_api import *
 #   Modify starter positions in the case we were 'penny'd out. 
 #   Send and cancel orders
 #       
-
+HOST = None
+API_KEY = None
 if len(sys.argv) < 3:
-    print("Please provide the HOST and API_KEY as command-line arguments.")
-    sys.exit(1)
+    HOST = "http://localhost:9999/v1"
+    API_KEY = "6BGT80LB"
+else:
+    HOST = sys.argv[1]
+    API_KEY = sys.argv[2]
 
-HOST = sys.argv[1]
-API_KEY = sys.argv[2]
 
 init(HOST,API_KEY)
 
-get_case()
-get_trader()
-get_limits()
+API_ORDERS_PER_TICK = 100
+API_ORDERS_PER_SECOND = 10
+
+prev_case = {"tick":-1}
+prev_limits = None
+
+my_orders = []
+other_orders = []
+
+trader = get_trader()
+
+while True:
+    case = get_case()
+    if case is None:
+        continue
+    if prev_case["period"] == case["period"] and prev_case["tick"] == case["tick"]:
+        continue
+
+    # We have a case and a new tick
+    print(case)
+
+    # Only print limits when they change
+    limits = get_limits()
+    if limits != prev_limits:
+        print(limits)
+
+
+
 
