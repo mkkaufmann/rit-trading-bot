@@ -65,6 +65,11 @@ while True:
     if limits != prev_limits:
         print(limits)
 
+    # Taking shortcut for this case
+    ticker = "HAR"
+    book = get_security_book(ticker)
+    print(book)
+
     prev_case = case
 
 
