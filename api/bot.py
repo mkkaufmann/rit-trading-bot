@@ -51,7 +51,7 @@ while True:
     case = get_case()
     if case is None:
         continue
-    if prev_case["period"] == case["period"] and prev_case["tick"] == case["tick"]:
+    if prev_case is None or (prev_case["period"] == case["period"] and prev_case["tick"] == case["tick"]):
         continue
 
     # We have a case and a new tick
