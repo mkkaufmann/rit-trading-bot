@@ -64,6 +64,8 @@ while True:
     if limits != prev_limits:
         print(limits)
 
+    prev_case = case
+
 
 
 
